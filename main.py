@@ -62,7 +62,12 @@ class Database:
         self._validate_initialization()
         with self._connection.cursor() as cursor:
             cursor.execute(sql)
-            return str(cursor.fetchone()[0])
+            out = ''
+            for row in cursor.fetchall():
+                col_strings = [str(col) for col in row]
+                out += ', '.join(col_strings)
+                out += '\n'
+            return out
 
     def _validate_initialization(self):
         if not self._initialized:
